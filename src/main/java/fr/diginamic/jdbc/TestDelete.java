@@ -1,27 +1,23 @@
 package fr.diginamic.jdbc;
 
-import java.sql.Statement;
-import java.sql.Connection;
-import java.sql.SQLException;
+import fr.diginamic.jdbc.dao.FournisseurDaoJdbc;
+import fr.diginamic.jdbc.entities.Fournisseur;
 
 public class TestDelete {
 
 	public static void main(String[] args) {
 		
-		try(Connection connection = DbConnect.connect()) {
-			
-			Statement statement = connection.createStatement();
-			String delete = "DELETE FROM fournisseur WHERE id = 4";
-			
-			int res = statement.executeUpdate(delete);
-			System.out.println(res > 0);
-			
-		} catch(SQLException e) {
-			
-			System.err.println(e.getMessage());
-			
-		}
+		FournisseurDaoJdbc dbManage = new FournisseurDaoJdbc();
 		
+		Fournisseur f = new Fournisseur(4, "La Maison de la Peinture");
+		
+		if (dbManage.delete(f)) {
+			System.out.println("Suppression des données effectuée");
+			return;
+		}
+		System.out.println("Une erreur est survenue lors de la suppression");
+		System.out.println();
+
 	}
 
 }

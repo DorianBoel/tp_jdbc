@@ -1,26 +1,21 @@
 package fr.diginamic.jdbc;
 
-import java.sql.Statement;
-import java.sql.Connection;
-import java.sql.SQLException;
+import fr.diginamic.jdbc.dao.FournisseurDaoJdbc;
 
 public class TestUpdate {
 
 	public static void main(String[] args) {
 		
-		try(Connection connection = DbConnect.connect()) {
-			
-			Statement statement = connection.createStatement();
-			String update = "UPDATE fournisseur SET nom = 'La Maison des Peintures' WHERE id = 4";
-			
-			int res = statement.executeUpdate(update);
-			System.out.println(res > 0);
-			
-		} catch(SQLException e) {
-			
-			System.err.println(e.getMessage());
-			
+		FournisseurDaoJdbc dbManage = new FournisseurDaoJdbc();
+		
+		int updateRes = dbManage.update("La Maison de la Peinture", "La Maison des Peintures");
+		
+		if (updateRes > 0) {
+			System.out.println("MAJ des données effectuée");
+			return;
 		}
+		System.out.println("Une erreur est survenue lors de la MAJ");
+		System.out.println();
 		
 	}
 
