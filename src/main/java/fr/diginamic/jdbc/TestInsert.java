@@ -13,7 +13,7 @@ public class TestInsert {
 		
 		dbManage.insert(f);
 		
-		Fournisseur f2 = new Fournisseur(5, "L'Espace Création");
+		Fournisseur f2 = new Fournisseur(6, "L'Espace Création");
 		
 		dbManage.insert(f2);
 		

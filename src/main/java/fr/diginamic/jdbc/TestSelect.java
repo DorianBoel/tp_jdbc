@@ -16,7 +16,6 @@ public class TestSelect {
 		for (Fournisseur f: fournisseurs) {
 			System.out.println(f.toString());
 		}
-		//Essayez d’insérer en base de données un fournisseur dont le nom contient un simple quote commepar exemple «L’Espace Création». Que se passe t’il?
 		
 	}
 

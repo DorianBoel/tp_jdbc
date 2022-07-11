@@ -18,6 +18,8 @@ public class DbConnect {
 		DB_PW = bundle.getString("jdbc.db.pw");
 	}
 	
+	private DbConnect() {}
+	
 	public static Connection connect() throws SQLException {
 		Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PW);
 		return connection;

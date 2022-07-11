@@ -1,6 +1,7 @@
 package fr.diginamic.jdbc.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,13 +13,40 @@ import fr.diginamic.jdbc.entities.Fournisseur;
 
 public class FournisseurDaoJdbc implements FournisseurDao {
 	
-	private int tryUpdate(String update) {
+	private int tryUpdate(String update, int id, String name) {
 		int response = 0;
 		try(Connection connection = DbConnect.connect()) {
-			Statement st = connection.createStatement();
-			System.out.println(update);
-			System.out.println();
-			response = st.executeUpdate(update);
+			PreparedStatement prepst = connection.prepareStatement(update);
+			prepst.setInt(1, id);
+			prepst.setString(2, name);
+			response = prepst.executeUpdate();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			System.err.println(e.getMessage());
+		}
+		return response;
+	}
+	
+	private int tryUpdate(String update, String ancien, String nouveau) {
+		int response = 0;
+		try(Connection connection = DbConnect.connect()) {
+			PreparedStatement prepst = connection.prepareStatement(update);
+			prepst.setString(1, ancien);
+			prepst.setString(2, nouveau);
+			response = prepst.executeUpdate();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			System.err.println(e.getMessage());
+		}
+		return response;
+	}
+	
+	private int tryUpdate(String update, int id) {
+		int response = 0;
+		try(Connection connection = DbConnect.connect()) {
+			PreparedStatement prepst = connection.prepareStatement(update);
+			prepst.setInt(1, id);
+			response = prepst.executeUpdate();
 		} catch(SQLException e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
@@ -33,6 +61,7 @@ public class FournisseurDaoJdbc implements FournisseurDao {
 			Statement st = connection.createStatement();
 			results = st.executeQuery(selectQuery);
 		} catch(SQLException e) {
+			e.printStackTrace();
 			System.err.println(e.getMessage());
 		}
 		return results;
@@ -62,12 +91,8 @@ public class FournisseurDaoJdbc implements FournisseurDao {
 
 	@Override
 	public void insert(Fournisseur fournisseur) {
-		String insertQuery = String.format(
-			"INSERT INTO fournisseur (id, nom) VALUES (%d, '%s')",
-			fournisseur.getId(),
-			fournisseur.getNom()
-		);
-		if (tryUpdate(insertQuery) > 0) {
+		String insertQuery = "INSERT INTO fournisseur (id, nom) VALUES (?, ?)";
+		if (tryUpdate(insertQuery, fournisseur.getId(), fournisseur.getNom()) > 0) {
 			System.out.println("Insertion des données effectuée");
 			System.out.println();
 			return;
@@ -77,21 +102,14 @@ public class FournisseurDaoJdbc implements FournisseurDao {
 
 	@Override
 	public int update(String ancienNom, String nouveauNom) {
-		String updateQuery = String.format(
-			"UPDATE fournisseur SET nom = '%s' WHERE nom = '%s'",
-			nouveauNom,
-			ancienNom
-		);
-		return tryUpdate(updateQuery);
+		String updateQuery = "UPDATE fournisseur SET nom = ? WHERE nom = ?";
+		return tryUpdate(updateQuery, ancienNom, ancienNom);
 	}
 
 	@Override
 	public boolean delete(Fournisseur fournisseur) {
-		String deleteQuery = String.format(
-			"DELETE FROM fournisseur WHERE id = %d",
-			fournisseur.getId()
-		);
-		return tryUpdate(deleteQuery) > 0;
+		String deleteQuery = "DELETE FROM fournisseur WHERE id = ?";
+		return tryUpdate(deleteQuery, fournisseur.getId()) > 0;
 	}	
 	
 }
