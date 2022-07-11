@@ -18,7 +18,9 @@ public class FournisseurDaoJdbc implements FournisseurDao {
 		try(Connection connection = DbConnect.connect()) {
 			PreparedStatement prepst = connection.prepareStatement(update);
 			prepst.setInt(1, id);
-			prepst.setString(2, name);
+			if(name != null) {				
+				prepst.setString(2, name);
+			}
 			response = prepst.executeUpdate();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -42,16 +44,7 @@ public class FournisseurDaoJdbc implements FournisseurDao {
 	}
 	
 	private int tryUpdate(String update, int id) {
-		int response = 0;
-		try(Connection connection = DbConnect.connect()) {
-			PreparedStatement prepst = connection.prepareStatement(update);
-			prepst.setInt(1, id);
-			response = prepst.executeUpdate();
-		} catch(SQLException e) {
-			e.printStackTrace();
-			System.err.println(e.getMessage());
-		}
-		return response;
+		return tryUpdate(update, id, null);
 	}
 	
 	private ResultSet selectAll() {
@@ -84,6 +77,7 @@ public class FournisseurDaoJdbc implements FournisseurDao {
 			}
 			return instanceList;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.err.println(e.getMessage());
 			return null;
 		}

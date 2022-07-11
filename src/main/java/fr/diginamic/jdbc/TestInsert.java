@@ -9,13 +9,13 @@ public class TestInsert {
 		
 		FournisseurDaoJdbc dbManage = new FournisseurDaoJdbc();
 		
-		Fournisseur f = new Fournisseur(4, "La Maison de la Peinture");
+		Fournisseur f = new Fournisseur(5, "La Maison de la Peinture");
 		
 		dbManage.insert(f);
 		
-		Fournisseur f2 = new Fournisseur(6, "L'Espace Création");
+		/*Fournisseur f2 = new Fournisseur(4, "L'Espace Création");
 		
-		dbManage.insert(f2);
+		dbManage.insert(f2);*/
 		
 	}
 
